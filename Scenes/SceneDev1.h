@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "ObjectPool.h"	
+#include "SpriteGo.h"
 
 class VertexArrayGo;
 class Player;
@@ -18,7 +19,7 @@ protected:
 	bool isGameOver;
 
 	ObjectPool<Zombie> poolZombies;
-
+	ObjectPool<SpriteGo> poolZombieBloods;
 
 public:
 	SceneDev1();
@@ -37,7 +38,7 @@ public:
 		std::string textureId);
 
 
-	void CreateZombies(int count);
+	//void CreateZombies(int count);
 	void SpawnZombies(int count, sf::Vector2f center, float radius);
 	void ClearZombies();
 

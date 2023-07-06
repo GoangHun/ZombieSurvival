@@ -17,7 +17,8 @@ SceneDev1::SceneDev1() : Scene(SceneId::Title), player(nullptr)
 	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/chaser.png"));
 	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/crawler.png"));
 	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/bullet.png"));
-	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/crosshair.png"));
+	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/blood.png"));
+
 }
 
 SceneDev1::~SceneDev1()
@@ -62,8 +63,12 @@ void SceneDev1::Init()
 		zombie->SetType(zombieType);
 		zombie->SetPlayer(player);
 	};
-
 	poolZombies.Init();
+
+	poolZombieBloods.OnCreate = [](SpriteGo* blood) {
+		blood->textureId = "graphics/blood.png";
+	};
+	poolZombieBloods.Init();
 	
 	for (auto go : gameObjects)
 	{
@@ -81,6 +86,7 @@ void SceneDev1::Release()
 	}
 
 	poolZombies.Release();
+	poolZombieBloods.Release();
 }
 
 void SceneDev1::Enter()
@@ -188,28 +194,28 @@ VertexArrayGo* SceneDev1::CreateBackground(sf::Vector2i size, sf::Vector2f tileS
 	return background;
 }
 
-void SceneDev1::CreateZombies(int count)
-{
-	for (int i = 0; i < count; i++)
-	{
-		Zombie* zombie = poolZombies.Get();
-		Zombie::Types zombieType = (Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes);
-		zombie->SetType(zombieType);
-		zombie->SetPlayer(player);
-		zombie->SetBackground(background);
-
-		zombie->Init();
-		zombie->Reset();
-		zombie->SetActive(false);
-
-		Scene* scene = SCENE_MGR.GetCurrScene();
-		SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
-		if (sceneDev1 != nullptr)
-		{
-			sceneDev1->AddGo(zombie);
-		}
-	}
-}
+//void SceneDev1::CreateZombies(int count)
+//{
+//	for (int i = 0; i < count; i++)
+//	{
+//		Zombie* zombie = poolZombies.Get();
+//		Zombie::Types zombieType = (Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes);
+//		zombie->SetType(zombieType);
+//		zombie->SetPlayer(player);
+//		zombie->SetBackground(background);
+//
+//		zombie->Init();
+//		zombie->Reset();
+//		zombie->SetActive(false);
+//
+//		Scene* scene = SCENE_MGR.GetCurrScene();
+//		SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
+//		if (sceneDev1 != nullptr)
+//		{
+//			sceneDev1->AddGo(zombie);
+//		}
+//	}
+//}
 
 void SceneDev1::SpawnZombies(int count, sf::Vector2f center, float radius)
 {
@@ -234,11 +240,24 @@ void SceneDev1::ClearZombies()
 		RemoveGo(zombie);
 	}
 
+	for (auto blood : poolZombieBloods.GetUseList())
+	{
+		RemoveGo(blood);
+	}
+
 	poolZombies.Clear();
+	poolZombieBloods.Clear();
 }
 
 void SceneDev1::OnDieZombie(Zombie* zombie)
 {
+	SpriteGo* blood = poolZombieBloods.Get();
+	sf::Vector2f pos;
+	pos = zombie->GetPosition();
+	blood->SetPosition(pos);
+	blood->SetOrigin(Origins::MC);
+	AddGo(blood);
+
 	RemoveGo(zombie);
 	poolZombies.Return(zombie);
 }
