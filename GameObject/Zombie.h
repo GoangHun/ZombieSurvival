@@ -35,7 +35,6 @@ protected:
 	float attackTimer = 0.f;
 	
 	Player* player = nullptr;
-	VertexArrayGo* background = nullptr;
 
 public:
 	Zombie(const std::string& n = "");
@@ -55,7 +54,6 @@ public:
 
 	void OnHitBullet(int damage);
 
-	void SetBackground(VertexArrayGo* background);
 	//bool OnCollisionWall();
 };
 

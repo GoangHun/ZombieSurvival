@@ -8,6 +8,7 @@
 #include "Zombie.h"
 #include "SceneMgr.h"
 #include "Crosshair.h"
+#include "Blood.h"
 
 SceneDev1::SceneDev1() : Scene(SceneId::Title), player(nullptr)
 {
@@ -39,8 +40,9 @@ void SceneDev1::Init()
 
 	sf::Vector2f tileWorldSize = { 50.f, 50.f };
 	sf::Vector2f tileTexSize = { 50.f, 50.f };
-
+	
 	player = (Player*)AddGo(new Player("graphics/player.png", "Player"));
+	player->sortLayer = 3;
 
 	background = CreateBackground({ 10, 10 }, tileWorldSize, tileTexSize,
 		"graphics/background_sheet.png");
@@ -229,6 +231,7 @@ void SceneDev1::SpawnZombies(int count, sf::Vector2f center, float radius)
 		} while (Utils::Distance(center, pos) < 100.f && radius > 100.f);
 
 		zombie->SetPosition(pos);
+		zombie->sortLayer = 2;
 		AddGo(zombie);
 	}
 }
@@ -251,11 +254,12 @@ void SceneDev1::ClearZombies()
 
 void SceneDev1::OnDieZombie(Zombie* zombie)
 {
-	SpriteGo* blood = poolZombieBloods.Get();
+	Blood* blood = poolZombieBloods.Get();
 	sf::Vector2f pos;
 	pos = zombie->GetPosition();
 	blood->SetPosition(pos);
 	blood->SetOrigin(Origins::MC);
+	blood->sortLayer = 1;
 	AddGo(blood);
 
 	RemoveGo(zombie);
@@ -266,6 +270,17 @@ void SceneDev1::OnDiePlayer()
 {
 	isGameOver = true;
 }
+
+void SceneDev1::ClearBlood(Blood* blood)
+{
+	RemoveGo(blood);
+	poolZombieBloods.Return(blood);
+}
+
+
+
+
+
 
 const std::list<Zombie*>* SceneDev1::GetZombieList() const
 {

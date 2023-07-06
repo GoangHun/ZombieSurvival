@@ -120,6 +120,9 @@ void Zombie::SetPlayer(Player* player)
     this->player = player;
 }
 
+
+
+
 void Zombie::OnHitBullet(int damage)
 {
     hp -= damage;
@@ -134,10 +137,7 @@ void Zombie::OnHitBullet(int damage)
     }
 }
 
-void Zombie::SetBackground(VertexArrayGo* background)
-{
-    this->background = background;
-}
+
 
 //bool Zombie::OnCollisionWall()
 //{

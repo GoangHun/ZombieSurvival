@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Blood.cpp" />
     <ClCompile Include="GameObject\Crosshair.cpp" />
     <ClCompile Include="GameObject\Bullet.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="GameObject\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameObject\Blood.h" />
     <ClInclude Include="Framework\ObjectPool.h" />
     <ClInclude Include="GameObject\Crosshair.h" />
     <ClInclude Include="GameObject\Bullet.h" />

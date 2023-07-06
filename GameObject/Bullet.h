@@ -17,7 +17,6 @@ protected:
 
 public:
 	ObjectPool<Bullet>* pool;
-
 	
 	Bullet(const std::string& n = "");
 	virtual ~Bullet() override;

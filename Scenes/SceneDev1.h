@@ -6,6 +6,7 @@
 class VertexArrayGo;
 class Player;
 class Zombie;
+class Blood;
 
 class SceneDev1 :
     public Scene
@@ -19,7 +20,7 @@ protected:
 	bool isGameOver;
 
 	ObjectPool<Zombie> poolZombies;
-	ObjectPool<SpriteGo> poolZombieBloods;
+	ObjectPool<Blood> poolZombieBloods;
 
 public:
 	SceneDev1();
@@ -44,6 +45,9 @@ public:
 
 	void OnDieZombie(Zombie* zombie);
 	void OnDiePlayer();
+
+	void ClearBlood(Blood* blood);
+
 	
 
 	const std::list<Zombie*>* GetZombieList() const;
